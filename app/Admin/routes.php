@@ -15,5 +15,6 @@ Route::group([
     $router->resources([
         'vps' => VpsController::class,
         'account' => AccountController::class,
+        'design' => DesignController::class,
     ]);
 });

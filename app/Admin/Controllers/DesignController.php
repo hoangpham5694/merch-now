@@ -115,6 +115,13 @@ class DesignController extends Controller
         $form = new Form(new Design);
 
         $form->display('ID');
+        $form->text('brand');
+        $form->text('title');
+        $form->text('key_product_1');
+        $form->text('key_product_2');
+        $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
+        $form->radio('mode')->options(['trend' => 'Trend', 'niche'=> 'Niche','tm'=>'TM'])->default('trend');
+        $form->textarea('note','Note')->rows(3);
         $form->display('Created at');
         $form->display('Updated at');
 

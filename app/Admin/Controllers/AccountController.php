@@ -84,12 +84,12 @@ class AccountController extends Controller
 
             // Remove the default id filter
             $filter->disableIdFilter();
-        
+
             // Add a column filter
             $filter->like('name', 'name');
             $filter->equal('vps_id','Vps')->select(Vps::all()->pluck('name', 'id'));
             $filter->equal('status')->select(['alive'=>'Alive','die'=>'Die']);
-        
+
         });
         $grid->id('ID');
         $grid->name()->editable();
@@ -103,6 +103,8 @@ class AccountController extends Controller
         // ];
         // $grid->status()->switch($states);
         $grid->browser();
+        $grid->note()->editable('textarea');
+
         return $grid;
     }
 
@@ -122,6 +124,10 @@ class AccountController extends Controller
         $show->password();
         $show->passmail();
         $show->vps()->name('Vps Name');
+        $show->note();
+        // $show->note()->as(function ($note) {
+        //     return "<pre>{$note}</pre>";
+        // });
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 
@@ -147,7 +153,7 @@ class AccountController extends Controller
             'chrome'=>'Chrome',
             'firefox'=>'FireFox',
             'edge'=>'Edge',
-            'coccoc'=>'Coc Coc', 
+            'coccoc'=>'Coc Coc',
             'ie'=>'Interner Explorer'
             ]);
         $form->select('status')->options(['alive'=>'Alive','die'=>'Die']);
