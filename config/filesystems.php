@@ -47,11 +47,17 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-        'admin' => [ 
-            'driver' => 'local', 
-            'root' => storage_path('uploads'), 
+        'admin' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
             'visibility' => 'public',
             'url' => env('APP_URL').'/uploads',
+        ],
+        'design' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/designs'),
+            'visibility' => 'public',
+            'url' => env('APP_URL').'/uploads/designs',
         ],
         'public' => [
             'driver' => 'local',

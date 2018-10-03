@@ -9,7 +9,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use Encore\Admin\Facades\Admin;
+use App\Models\Account;
 class DesignController extends Controller
 {
     use HasResourceActions;
@@ -80,10 +81,14 @@ class DesignController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Design);
-
+        $grid->model()->orderBy('id','DESC');
         $grid->id('ID');
+        $grid->image()->gallery(['zooming' => true]);
+
+
+
         $grid->created_at('Created at');
-        $grid->updated_at('Updated at');
+
 
         return $grid;
     }
@@ -98,10 +103,10 @@ class DesignController extends Controller
     {
         $show = new Show(Design::findOrFail($id));
 
-        $show->id('ID');
+        $show->id('id');
+
         $show->created_at('Created at');
         $show->updated_at('Updated at');
-
         return $show;
     }
 
@@ -113,18 +118,33 @@ class DesignController extends Controller
     protected function form()
     {
         $form = new Form(new Design);
+        $form->tab('Design', function ($form) {
+            $form->display('id');
+            $form->hidden('user_id');
+            $form->image('image')->uniqueName()->move('designs/');
+            $form->radio('mode')->options(['trend' => 'Trend', 'niche'=> 'Niche','tm'=>'TM'])->default('trend');
 
-        $form->display('ID');
-        $form->text('brand');
-        $form->text('title');
-        $form->text('key_product_1');
-        $form->text('key_product_2');
-        $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
-        $form->radio('mode')->options(['trend' => 'Trend', 'niche'=> 'Niche','tm'=>'TM'])->default('trend');
-        $form->textarea('note','Note')->rows(3);
-        $form->display('Created at');
-        $form->display('Updated at');
+        })->tab('Info', function ($form) {
 
+            $form->text('brand');
+            $form->text('title');
+            $form->text('key_product_1');
+            $form->text('key_product_2');
+            $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
+            $form->select('account_id','Account')->options(Account::all()->pluck('name', 'id'));
+            $form->textarea('note','Note')->rows(3);
+            $form->display('Created at');
+            $form->display('Updated at');
+        });
+
+
+
+
+
+
+        $form->saving(function (Form $form) {
+            $form->user_id= Admin::user()->id;
+        });
         return $form;
     }
 }
