@@ -96,6 +96,7 @@ class AccountController extends Controller
         $grid->username();
         $grid->password()->editable();
         $grid->vps()->name('Vps Name');
+      
         $grid->status()->editable('select', ['alive' => 'Alive', 'die' => 'Die']);
         // $states = [
         //     'on'  => ['value' => 'alive', 'text' => 'Alive', 'color' => 'primary'],
@@ -130,7 +131,29 @@ class AccountController extends Controller
         // });
         $show->created_at('Created at');
         $show->updated_at('Updated at');
+        $show->divider();
+        $show->designs('Designs of this account', function ($designs) {
 
+            $designs->resource('/admin/design');
+        
+            $designs->id();
+            $designs->image()->gallery(['zooming' => true]);
+            $designs->brand()->editable();
+            $designs->title()->editable();
+            $designs->user()->name('Designer');
+            $designs->mode()->editable('select', ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM']);
+            $designs->status()->select([
+                'pending' => 'Pending',
+                'review' => 'Under Review',
+                'wait' => 'Wait merch approve',
+                'live' => 'Live',
+                'die' => 'Die',
+            ]);
+            $designs->note('Note')->editable();
+            $designs->created_at('Created at');
+        
+
+        });
         return $show;
     }
 

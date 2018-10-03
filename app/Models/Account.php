@@ -17,6 +17,6 @@ class Account extends Model
     }
     public function designs()
     {
-        return $this->hasMany(Account::class);
+        return $this->hasMany(Design::class);
     }
 }

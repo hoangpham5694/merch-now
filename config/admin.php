@@ -222,7 +222,7 @@ return [
     |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
     |
     */
-    'skin' => 'skin-green',
+    'skin' => 'skin-blue',
 
     /*
     |--------------------------------------------------------------------------
@@ -298,6 +298,10 @@ return [
 
            // Set to `false` if you want to disable this extension
            'enable' => true,
-       ]
+       ],
+       'material-ui' => [
+            // If the value is set to false, this extension will be disabled
+            'enable' => false
+        ]
     ],
 ];
