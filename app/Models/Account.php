@@ -15,8 +15,8 @@ class Account extends Model
     {
         return $this->belongsTo(Vps::class);
     }
-    public function designs()
+    public function shirt()
     {
-        return $this->hasMany(Design::class);
+        return $this->hasMany(Shirt::class);
     }
 }

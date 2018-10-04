@@ -84,17 +84,16 @@ class DesignController extends Controller
         $grid = new Grid(new Design);
         $grid->filter(function($filter){
             $filter->scope('my', 'Your Designs')->where('user_id', Admin::user()->id);
-            $filter->scope('haventbeenup', 'Havent been uploaded')->where('account_id', null);
-            
+        //    $filter->scope('haventbeenup', 'Havent been uploaded')->where('account_id', null);
+
             $filter->where(function ($query) {
 
                 $query->where('title', 'like', "%{$this->input}%")
-                    ->orWhere('brand', 'like', "%{$this->input}%")
-                    ->orWhere('key_product_1', 'like', "%{$this->input}%")
-                    ->orWhere('key_product_2', 'like', "%{$this->input}%");
-            
+                    ->orWhere('note', 'like', "%{$this->input}%");
+
+
             }, 'Keyword');
-            $filter->equal('account_id','Account')->select(Account::all()->pluck('name', 'id'));
+
             $filter->equal('user_id','Designer')->select(User::all()->pluck('name', 'id'));
             $filter->equal('mode','Mode')->select(DESIGN_MODES);
             $filter->equal('status')->select(
@@ -109,15 +108,28 @@ class DesignController extends Controller
       //  $grid->model()->where('account_id', '=', null);
         $grid->id('ID');
         $grid->image()->gallery(['zooming' => true]);
-        $grid->brand()->editable();
-        $grid->title()->editable();
-        $grid->account()->name("Account");
-        // $grid->key_product_1()->editable();
-        // $grid->key_product_2()->editable();
 
-     
+        $grid->title()->editable();
+
+
         $grid->user()->name('Designer');
         $grid->mode()->editable('select', DESIGN_MODES);
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+          // // the array of data for the current row
+            $row=  $actions->row;
+          //
+          // // gets the current row primary key value
+          // $actions->getKey();
+            // append an action.
+        //    $actions->append('<a href=""><i class="fa fa-eye"></i></a>');
+            $urlDownload= asset('uploads')."/".$row->image;
+            $urlAddShirt = asset('admin/shirt/create')."?design_id=".$row->id;
+          //  dd($urlDownload);
+            // prepend an action.
+            $actions->prepend('<a href="'.$urlAddShirt.'" target="_blank" ><i class="fa fa-plus"></i></a>');
+            $actions->prepend('<a href="'.$urlDownload.'" target="_blank" download="'.$row->image.'"><i class="fa fa-download"></i></a>');
+        });
         // $grid->column('image1')->display(function ($image1) {
         //
         //       return "<a href=".asset('uploads')."/".$image1." target='_blank' download=".$image1.">Download</a>";
@@ -143,29 +155,42 @@ class DesignController extends Controller
 
         //  dd($design->account_id);
         //  exit();
+        $show->panel()
+          ->tools(function ($tools) {
+            if(!Admin::user()->isAdministrator()){
+                $tools->disableDelete();
+            }
 
-        
-        $show->image()->image(null,400,400);
+          });
+        $urlDownload= asset('uploads')."/".$design->image;
+        $show->image()->image(null,400,400)->link($urlDownload);
+      //  $show->download()->link($urlDownload,'_blank');
+
+      //  $show->image()->file();
         $show->divider();
         $show->id('id');
-        $show->brand();
-        $show->title();
-        $show->key_product_1();
-        $show->key_product_2();
-        $show->account()->name('Account')->link(env('APP_URL').'/admin/account/'.$design->account_id);
         $show->user()->name('Designer')->link(env('APP_URL').'/admin/auth/users/'.$design->user_id);
+        $show->title();
         $show->note('Note');
-        // $show->account('Account information', function ($account) {
 
-        //     $account->setResource('/admin/account');
-        
-        //     $account->id();
-        //     $account->name();
-        //     $account->username();
-        // });
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 
+        $show->shirts('Shirts of this design', function ($shirts) {
+
+            $shirts->resource('/admin/shirt');
+
+            $shirts->id();
+            $shirts->brand()->editable();
+            $shirts->title()->editable();
+            $shirts->account()->name("Account");
+            $shirts->user()->name('Uploader');
+            $shirts->type()->using(SHIRT_TYPES);
+            $shirts->note()->editable();
+            $shirts->created_at();
+
+
+        });
         return $show;
     }
 
@@ -177,31 +202,14 @@ class DesignController extends Controller
     protected function form()
     {
         $form = new Form(new Design);
-        $form->tab('Design', function ($form) {
-            $form->display('id');
-      //      $form->display('status');
-            $form->hidden('user_id');
-            $form->image('image')->uniqueName()->move('designs');
-            $form->radio('mode')->options(DESIGN_MODES)->default('trend');
 
-        })->tab('Info', function ($form) {
-
-            $form->text('brand');
-            $form->text('title');
-            $form->text('key_product_1');
-            $form->text('key_product_2');
-            $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
-            $form->select('account_id','Account')->options(Account::all()->pluck('name', 'id'));
-            $form->textarea('note','Note')->rows(3);
-            $form->select('status')->options(DESIGN_STATUSES)->default('trend');
-            $form->display('Created at');
-            $form->display('Updated at');
-        });
-
-
-
-
-
+        $form->display('id');
+  //      $form->display('status');
+        $form->hidden('user_id');
+        $form->text('title')->rules('required');
+        $form->image('image')->uniqueName()->move('designs');
+        $form->radio('mode')->options(DESIGN_MODES)->default('trend');
+        $form->textarea('note','Note')->rows(3);
 
         $form->saving(function (Form $form) {
             $form->user_id= Admin::user()->id;

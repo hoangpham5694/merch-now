@@ -8,15 +8,15 @@ class Design extends Model
 {
     protected $table = 'designs';
     public $fillable = [
-        'brand',
-        'status'
+
     ];
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
-    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function shirts()
+    {
+        return $this->hasMany(Shirt::class);
     }
 }

@@ -16,5 +16,6 @@ Route::group([
         'vps' => VpsController::class,
         'account' => AccountController::class,
         'design' => DesignController::class,
+        'shirt' => ShirtController::class,
     ]);
 });

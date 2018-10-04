@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateAccountTable extends Migration
+class EditShirtsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class UpdateAccountTable extends Migration
      */
     public function up()
     {
-        Schema::table('accounts', function (Blueprint $table) {
-            $table->string('browser')->nullable();
-        
-        });
+      Schema::table('shirts', function (Blueprint $table) {
+          $table->string('type')->nullable();
+          $table->integer('sold')->default(0);
+      });
     }
 
     /**
