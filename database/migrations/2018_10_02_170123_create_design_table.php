@@ -23,8 +23,8 @@ class CreateDesignTable extends Migration
             $table->float('price')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('account_id')->nullable();
-            $table->string('mode');
-            $table->string('status')->default('pending');
+            $table->string('mode')->nullable();
+            $table->string('status')->nullable()->default('pending');
             $table->text('note');
             $table->timestamps();
         });

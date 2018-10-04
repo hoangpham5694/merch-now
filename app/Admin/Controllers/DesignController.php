@@ -96,15 +96,9 @@ class DesignController extends Controller
             }, 'Keyword');
             $filter->equal('account_id','Account')->select(Account::all()->pluck('name', 'id'));
             $filter->equal('user_id','Designer')->select(User::all()->pluck('name', 'id'));
-            $filter->equal('mode','Mode')->select(['trend' => 'Trend', 'niche'=> 'Niche','tm'=>'TM']);
+            $filter->equal('mode','Mode')->select(DESIGN_MODES);
             $filter->equal('status')->select(
-                [
-                    'pending' => 'Pending',
-                    'review' => 'Under Review',
-                    'wait' => 'Wait merch approve',
-                    'live' => 'Live',
-                    'die' => 'Die',
-                ]
+               DESIGN_STATUSES
             );
             $filter->between('created_at', 'Day Create')->date();
         });
@@ -123,19 +117,13 @@ class DesignController extends Controller
 
      
         $grid->user()->name('Designer');
-        $grid->mode()->editable('select', ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM']);
+        $grid->mode()->editable('select', DESIGN_MODES);
         // $grid->column('image1')->display(function ($image1) {
         //
         //       return "<a href=".asset('uploads')."/".$image1." target='_blank' download=".$image1.">Download</a>";
         //
         //   });
-        $grid->status()->select([
-            'pending' => 'Pending',
-            'review' => 'Under Review',
-            'wait' => 'Wait merch approve',
-            'live' => 'Live',
-            'die' => 'Die',
-        ]);
+        $grid->status()->select(DESIGN_STATUSES);
         $grid->note('Note')->editable();
         $grid->created_at('Created at');
 
@@ -194,7 +182,7 @@ class DesignController extends Controller
       //      $form->display('status');
             $form->hidden('user_id');
             $form->image('image')->uniqueName()->move('designs');
-            $form->radio('mode')->options(['trend' => 'Trend', 'niche'=> 'Niche','tm'=>'TM'])->default('trend');
+            $form->radio('mode')->options(DESIGN_MODES)->default('trend');
 
         })->tab('Info', function ($form) {
 
@@ -205,13 +193,7 @@ class DesignController extends Controller
             $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
             $form->select('account_id','Account')->options(Account::all()->pluck('name', 'id'));
             $form->textarea('note','Note')->rows(3);
-            $form->select('status')->options([
-                'pending' => 'Pending',
-                'review' => 'Under Review',
-                'wait' => 'Wait merch approve',
-                'live' => 'Live',
-                'die' => 'Die',
-            ])->default('trend');
+            $form->select('status')->options(DESIGN_STATUSES)->default('trend');
             $form->display('Created at');
             $form->display('Updated at');
         });

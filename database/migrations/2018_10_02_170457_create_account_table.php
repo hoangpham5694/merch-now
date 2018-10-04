@@ -19,7 +19,7 @@ class CreateAccountTable extends Migration
             $table->string('name');
             $table->string('password');
             $table->string('passmail');
-            $table->string('status')->default('alive');
+            $table->string('status')->nullable()->default('alive');
             $table->integer('vps_id')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
