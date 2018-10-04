@@ -86,19 +86,32 @@ class ShirtController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Shirt);
+        if(!Admin::user()->isAdministrator()){
+            $grid->model()->where('status','<>','close');
+        }
         $grid->filter(function($filter){
             $filter->scope('my', 'Your Shirts')->where('user_id', Admin::user()->id);
-        //    $filter->scope('haventbeenup', 'Havent been uploaded')->where('account_id', null);
+            if(Admin::user()->isAdministrator()){
+              $filter->scope('trashed', 'Soft deleted data')->where('status','=','close');
+              $filter->scope('except-trashed', 'Except deleted')->where('status','<>','close');
+            }
 
+        //    $filter->scope('haventbeenup', 'Havent been uploaded')->where('account_id', null);
+            $filter->equal('design_id');
             $filter->where(function ($query) {
 
                 $query->where('title', 'like', "%{$this->input}%")
+                    ->orWhere('brand', 'like', "%{$this->input}%")
+                    ->orWhere('key_product_1', 'like', "%{$this->input}%")
+                    ->orWhere('key_product_2', 'like', "%{$this->input}%")
                     ->orWhere('note', 'like', "%{$this->input}%");
 
 
+
             }, 'Keyword');
+
             $filter->equal('account_id','Account')->select(Account::all()->pluck('name', 'id'));
-            $filter->equal('user_id','Designer')->select(User::all()->pluck('name', 'id'));
+            $filter->equal('user_id','Uploader')->select(User::all()->pluck('name', 'id'));
             $filter->equal('mode','Mode')->select(SHIRT_TYPES);
             $filter->equal('status')->select(
                SHIRT_STATUSES
@@ -144,9 +157,15 @@ class ShirtController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Shirt::findOrFail($id));
-
+        $show = new Show($shirt = Shirt::findOrFail($id));
+        $design = Design::findOrFail($shirt->design_id);
         $show->id('ID');
+        $show->design()->id('Design Id');
+
+        //$urlDownload= asset('uploads')."/".$shirt->design()->image;
+        $show->design()->image()->image(null,400,400);
+        $show->user()->name('Uploader');
+
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 

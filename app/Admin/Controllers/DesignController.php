@@ -82,9 +82,17 @@ class DesignController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Design);
+        if(!Admin::user()->isAdministrator()){
+            $grid->model()->where('status','<>','close');
+        }
+
         $grid->filter(function($filter){
+
             $filter->scope('my', 'Your Designs')->where('user_id', Admin::user()->id);
-        //    $filter->scope('haventbeenup', 'Havent been uploaded')->where('account_id', null);
+            if(Admin::user()->isAdministrator()){
+              $filter->scope('trashed', 'Soft deleted data')->where('status','=','close');
+              $filter->scope('except-trashed', 'Except deleted')->where('status','<>','close');
+            }
 
             $filter->where(function ($query) {
 
@@ -110,10 +118,25 @@ class DesignController extends Controller
         $grid->image()->gallery(['zooming' => true]);
 
         $grid->title()->editable();
-
-
+        $grid->note('Note')->editable();
+        $grid->shirts('Total Shirts')->display(function ($shirts) {
+             $count = count($shirts);
+             return "<span >{$count}</span>";
+         });
+         $grid->column('Shirts Alive')->display(function () {
+              $count = $this->shirts()->where('status','=','live')->count();
+              return "<span >{$count}</span>";
+          });
+          $grid->column('Shirts Die')->display(function () {
+               $count = $this->shirts()->where('status','=','reject')->count();
+               return "<span >{$count}</span>";
+           });
         $grid->user()->name('Designer');
         $grid->mode()->editable('select', DESIGN_MODES);
+        $grid->status()->select(DESIGN_STATUSES);
+
+        $grid->created_at('Created at');
+
         $grid->actions(function ($actions) {
             $actions->disableDelete();
           // // the array of data for the current row
@@ -135,9 +158,7 @@ class DesignController extends Controller
         //       return "<a href=".asset('uploads')."/".$image1." target='_blank' download=".$image1.">Download</a>";
         //
         //   });
-        $grid->status()->select(DESIGN_STATUSES);
-        $grid->note('Note')->editable();
-        $grid->created_at('Created at');
+
 
 
         return $grid;
