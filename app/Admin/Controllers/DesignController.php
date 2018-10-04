@@ -84,6 +84,8 @@ class DesignController extends Controller
         $grid = new Grid(new Design);
         if(!Admin::user()->isAdministrator()){
             $grid->model()->where('status','<>','close');
+         //   $grid->disableActions();
+            $grid->disableRowSelector();
         }
 
         $grid->filter(function($filter){
@@ -223,6 +225,13 @@ class DesignController extends Controller
     protected function form()
     {
         $form = new Form(new Design);
+        $form->tools(function (Form\Tools $tools) {
+
+            // Disable back btn.
+            $tools->disableDelete();
+        
+
+        });
 
         $form->display('id');
   //      $form->display('status');

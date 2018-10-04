@@ -88,6 +88,7 @@ class ShirtController extends Controller
         $grid = new Grid(new Shirt);
         if(!Admin::user()->isAdministrator()){
             $grid->model()->where('status','<>','close');
+            $grid->disableRowSelector();
         }
         $grid->filter(function($filter){
             $filter->scope('my', 'Your Shirts')->where('user_id', Admin::user()->id);
@@ -188,7 +189,13 @@ class ShirtController extends Controller
     {
         //dd();
         $form = new Form(new Shirt);
+        $form->tools(function (Form\Tools $tools) {
 
+            // Disable back btn.
+            $tools->disableDelete();
+        
+
+        });
         $form->display('ID');
         $form->hidden('user_id');
         $form->number('design_id')->min(0)->value(request('design_id'));
