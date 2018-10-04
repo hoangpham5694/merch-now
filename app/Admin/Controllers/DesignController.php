@@ -229,9 +229,9 @@ class DesignController extends Controller
         $form->hidden('user_id');
         $form->text('title')->rules('required');
         $form->image('image')->uniqueName()->move('designs');
-        $form->radio('mode')->options(DESIGN_MODES)->default('trend');
+        $form->radio('mode')->options(DESIGN_MODES)->default('trend')->rules('required');
         $form->textarea('note','Note')->rows(3);
-
+        $form->select('status')->options(DESIGN_STATUSES)->default('ok')->rules('required');
         $form->saving(function (Form $form) {
             $form->user_id= Admin::user()->id;
             if($form->status ==null)
