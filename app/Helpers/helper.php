@@ -19,3 +19,13 @@ const SHIRT_TYPES=[
   'long-sleeve' => 'Long Sleeve T-Shirt',
   'hoodie' => 'Pullover Hoodie',
 ];
+const VPS_SERVICES=['aws' => 'Amazon', 'vultr' => 'Vultr','gcloud' => 'Google Cloud'];
+const ACCOUNT_STATUSES=['alive'=>'Alive','die'=>'Die'];
+const ACCOUNT_MODES = ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM'];
+const LIST_BROWSERS = [
+  'chrome'=>'Chrome',
+  'firefox'=>'FireFox',
+  'edge'=>'Edge',
+  'coccoc'=>'Coc Coc',
+  'ie'=>'Interner Explorer'
+];

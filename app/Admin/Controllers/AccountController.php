@@ -88,7 +88,7 @@ class AccountController extends Controller
             // Add a column filter
             $filter->like('name', 'name');
             $filter->equal('vps_id','Vps')->select(Vps::all()->pluck('name', 'id'));
-            $filter->equal('status')->select(['alive'=>'Alive','die'=>'Die']);
+            $filter->equal('status')->select(ACCOUNT_STATUSES);
 
         });
         $grid->id('ID');
@@ -141,7 +141,7 @@ class AccountController extends Controller
             $designs->brand()->editable();
             $designs->title()->editable();
             $designs->user()->name('Designer');
-            $designs->mode()->editable('select', ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM']);
+            $designs->mode()->editable('select', ACCOUNT_MODES);
             $designs->status()->select([
                 'pending' => 'Pending',
                 'review' => 'Under Review',
@@ -172,14 +172,8 @@ class AccountController extends Controller
         $form->text('password','Password')->rules('required');
         $form->text('passmail','Pass Mail')->rules('required');
         $form->select('vps_id','VPS')->options(Vps::all()->pluck('name', 'id'));
-        $form->select('browser','Browser')->options([
-            'chrome'=>'Chrome',
-            'firefox'=>'FireFox',
-            'edge'=>'Edge',
-            'coccoc'=>'Coc Coc',
-            'ie'=>'Interner Explorer'
-            ]);
-        $form->select('status')->options(['alive'=>'Alive','die'=>'Die']);
+        $form->select('browser','Browser')->options(LIST_BROWSERS);
+        $form->select('status')->options(ACCOUNT_STATUSES);
         $form->textarea('note','Note')->rows(3);
 
 

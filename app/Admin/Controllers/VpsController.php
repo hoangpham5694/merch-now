@@ -87,7 +87,7 @@ class VpsController extends Controller
         $grid->column('ip');
         $grid->column('username');
         $grid->column('password');
-        $grid->service()->using(['aws' => 'Amazon', 'vultr' => 'Vultr','gcloud' => 'Google Cloud']);
+        $grid->service()->using(VPS_SERVICES);
 
         return $grid;
     }
@@ -130,7 +130,7 @@ class VpsController extends Controller
         $form->text('username','Username')->rules('required');
         $form->text('password','Password');
 
-        $form->radio('service', 'Service')->options(['aws' => 'Amazon', 'vultr' => 'Vultr','gcloud' => 'Google Cloud'])->default('vultr');
+        $form->radio('service', 'Service')->options(VPS_SERVICES)->default('vultr');
 
  
         $form->textarea('note','Note')->rows(3);

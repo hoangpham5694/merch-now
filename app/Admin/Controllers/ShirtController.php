@@ -163,9 +163,16 @@ class ShirtController extends Controller
         $show->design()->id('Design Id');
 
         //$urlDownload= asset('uploads')."/".$shirt->design()->image;
-        $show->design()->image()->image(null,400,400);
+      //  $show->design()->image()->image(null,400,400);
         $show->user()->name('Uploader');
-
+        $show->account()->name('Account');
+        $show->brand();
+        $show->title();
+        $show->key_produck_1();
+        $show->key_produck_2();
+        $show->note();
+        $show->type()->using(SHIRT_TYPES);
+        $show->status()->using(SHIRT_STATUSES);
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 
