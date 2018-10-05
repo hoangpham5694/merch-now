@@ -87,6 +87,7 @@ class VpsController extends Controller
         $grid->column('ip');
         $grid->column('username');
         $grid->column('password');
+        $grid->column('note');
         $grid->service()->using(VPS_SERVICES);
 
         return $grid;
@@ -101,13 +102,14 @@ class VpsController extends Controller
     protected function detail($id)
     {
         $show = new Show(Vps::findOrFail($id));
-    
+
         $show->id('ID');
-        
+
         $show->name('name');
         $show->ip('ip');
         $show->username('Username');
         $show->password('password');
+        $show->note();
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 
@@ -132,7 +134,7 @@ class VpsController extends Controller
 
         $form->radio('service', 'Service')->options(VPS_SERVICES)->default('vultr');
 
- 
+
         $form->textarea('note','Note')->rows(3);
 
 

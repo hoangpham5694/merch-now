@@ -4,7 +4,7 @@ const DESIGN_STATUSES = [
   'danger' => 'Danger',
   'close' => 'Close',
 ];
-const DESIGN_MODES= ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM'];
+const DESIGN_MODES= ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM','niche-trend'=>'Niche - Trend'];
 const SHIRT_STATUSES = [
     'review' => 'Review',
     'close' => 'close',
@@ -15,7 +15,7 @@ const SHIRT_STATUSES = [
 const SHIRT_TYPES=[
   'standard'=>'Standard T-Shirt',
   'premium'=>'Premium T-Shirt',
-  'premium'=>'Premium T-Shirt',
+  'sweat'=>'Sweatshirt',
   'long-sleeve' => 'Long Sleeve T-Shirt',
   'hoodie' => 'Pullover Hoodie',
 ];

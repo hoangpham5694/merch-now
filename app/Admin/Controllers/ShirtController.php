@@ -111,7 +111,7 @@ class ShirtController extends Controller
 
             }, 'Keyword');
 
-            $filter->equal('account_id','Account')->select(Account::all()->pluck('username', 'id'));
+            $filter->equal('account_id','Account')->select(Account::all()->pluck('name', 'id'));
             $filter->equal('user_id','Uploader')->select(User::all()->pluck('name', 'id'));
             $filter->equal('mode','Mode')->select(SHIRT_TYPES);
             $filter->equal('status')->select(
@@ -138,7 +138,7 @@ class ShirtController extends Controller
         $grid->design()->image()->gallery(['zooming' => true]);
         $grid->brand()->editable();
         $grid->title()->editable();
-        $grid->account()->username("Account");
+        $grid->account()->name("Account");
         $grid->user()->name('Uploader');
         $grid->note()->editable();
         $grid->type()->using(SHIRT_TYPES);
@@ -162,6 +162,7 @@ class ShirtController extends Controller
         $design = Design::findOrFail($shirt->design_id);
         $show->id('ID');
         $show->design()->id('Design Id');
+        $show->price();
 
         //$urlDownload= asset('uploads')."/".$shirt->design()->image;
       //  $show->design()->image()->image(null,400,400);
@@ -205,9 +206,9 @@ class ShirtController extends Controller
         $form->text('title')->rules('required|min:3');
         $form->text('key_product_1')->rules('required|min:3');
         $form->text('key_product_2');
-        $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
+        $form->number("price","Price")->min(10)->max(100)->default(19);
         $form->divide();
-        $form->select('account_id', 'Account')->options(Account::all()->pluck('username', 'id'));
+        $form->select('account_id', 'Account')->options(Account::all()->pluck('name', 'id'));
         $form->select('status')->options(SHIRT_STATUSES)->default('wait')->rules('required');
         $form->select('type')->options(SHIRT_TYPES)->default('standard')->rules('required');
         $form->divide();
