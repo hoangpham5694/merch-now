@@ -111,7 +111,7 @@ class ShirtController extends Controller
 
             }, 'Keyword');
 
-            $filter->equal('account_id','Account')->select(Account::all()->pluck('name', 'id'));
+            $filter->equal('account_id','Account')->select(Account::all()->pluck('username', 'id'));
             $filter->equal('user_id','Uploader')->select(User::all()->pluck('name', 'id'));
             $filter->equal('mode','Mode')->select(SHIRT_TYPES);
             $filter->equal('status')->select(
@@ -138,7 +138,7 @@ class ShirtController extends Controller
         $grid->design()->image()->gallery(['zooming' => true]);
         $grid->brand()->editable();
         $grid->title()->editable();
-        $grid->account()->name("Account");
+        $grid->account()->username("Account");
         $grid->user()->name('Uploader');
         $grid->note()->editable();
         $grid->type()->using(SHIRT_TYPES);
@@ -193,7 +193,7 @@ class ShirtController extends Controller
 
             // Disable back btn.
             $tools->disableDelete();
-        
+
 
         });
         $form->display('ID');
@@ -207,7 +207,7 @@ class ShirtController extends Controller
         $form->text('key_product_2');
         $form->number("price","Price (x,99 dollar)")->min(10)->max(25)->default(19);
         $form->divide();
-        $form->select('account_id', 'Account')->options(Account::all()->pluck('name', 'id'))->rules('required');
+        $form->select('account_id', 'Account')->options(Account::all()->pluck('username', 'id'));
         $form->select('status')->options(SHIRT_STATUSES)->default('wait')->rules('required');
         $form->select('type')->options(SHIRT_TYPES)->default('standard')->rules('required');
         $form->divide();
