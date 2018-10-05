@@ -19,4 +19,10 @@ class Design extends Model
     {
         return $this->hasMany(Shirt::class);
     }
+    public function shirtsCount($status=''){
+      if($status=='')
+        return $this->shirts()->count();
+      else
+        return $this->shirts()->where('status','=',$status)->count();
+    }
 }

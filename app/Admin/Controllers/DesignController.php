@@ -91,6 +91,11 @@ class DesignController extends Controller
         $grid->filter(function($filter){
 
             $filter->scope('my', 'Your Designs')->where('user_id', Admin::user()->id);
+            $filter->scope('haventshirt', 'Design havent any shirts')->doesntHave('shirts');
+            // $filter->scope('haventshirt', 'Design havent any shirts')->doesntHave('shirts', function ($query) {
+            //     $query->whereNotNull('id');
+            // });
+
             if(Admin::user()->isAdministrator()){
               $filter->scope('trashed', 'Soft deleted data')->where('status','=','close');
               $filter->scope('except-trashed', 'Except deleted')->where('status','<>','close');
@@ -186,6 +191,7 @@ class DesignController extends Controller
 
           });
         $urlDownload= asset('uploads')."/".$design->image;
+    //    dump($design->shirtsCount('live'));
         $show->image()->image(null,400,400)->link($urlDownload);
       //  $show->download()->link($urlDownload,'_blank');
 
@@ -194,6 +200,7 @@ class DesignController extends Controller
         $show->id('id');
         $show->user()->name('Designer')->link(env('APP_URL').'/admin/auth/users/'.$design->user_id);
         $show->title();
+      //  $show->shirtsCount();
         $show->note('Note');
 
         $show->created_at('Created at');
