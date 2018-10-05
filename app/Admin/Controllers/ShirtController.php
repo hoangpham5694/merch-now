@@ -139,6 +139,14 @@ class ShirtController extends Controller
         $grid->brand()->editable();
         $grid->title()->editable();
         $grid->account()->name("Account");
+      //  $grid->account()->vps()->ip("VPS");
+        // $grid->column('VPS')->display(function () {
+        //
+        //      $account = $this->account();
+        //
+        //      dump($this);
+        //      return "<span >{$vps->name}</span>";
+        //  });
         $grid->user()->name('Uploader');
         $grid->note()->editable();
         $grid->type()->using(SHIRT_TYPES);
@@ -198,7 +206,7 @@ class ShirtController extends Controller
 
         });
         $form->display('ID');
-        $form->hidden('user_id');
+        $form->hidden('user_id')->default(Admin::user()->id);
         $form->number('design_id')->min(0)->value(request('design_id'));
         $form->divide();
     //    ->default( isset($params['design_id'])? $params['design_id'] : '' )
@@ -218,7 +226,7 @@ class ShirtController extends Controller
         $form->display('Updated at');
 
         $form->saving(function (Form $form) {
-            $form->user_id= Admin::user()->id;
+        //    $form->user_id= Admin::user()->id;
             if($form->status ==null)
                  $form->status="wait";
         });

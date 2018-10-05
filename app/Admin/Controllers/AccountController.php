@@ -96,7 +96,19 @@ class AccountController extends Controller
         $grid->username();
         $grid->password()->editable();
         $grid->vps()->name('Vps Name');
-      
+        $grid->column('Total Shirts')->display(function () {
+             $count = $this->shirts()->count();
+             return "<span >{$count}</span>";
+         });
+        $grid->column('Shirts Alive')->display(function () {
+             $count = $this->shirts()->where('status','=','live')->count();
+             return "<span >{$count}</span>";
+         });
+         $grid->column('Shirts Reject')->display(function () {
+              $count = $this->shirts()->where('status','=','reject')->count();
+              return "<span >{$count}</span>";
+          });
+
         $grid->status()->editable('select', ['alive' => 'Alive', 'die' => 'Die']);
         // $states = [
         //     'on'  => ['value' => 'alive', 'text' => 'Alive', 'color' => 'primary'],
@@ -132,26 +144,21 @@ class AccountController extends Controller
         $show->created_at('Created at');
         $show->updated_at('Updated at');
         $show->divider();
-        $show->designs('Designs of this account', function ($designs) {
+        $show->shirts('Shirt of this account', function ($shirts) {
 
-            $designs->resource('/admin/design');
-        
-            $designs->id();
-            $designs->image()->gallery(['zooming' => true]);
-            $designs->brand()->editable();
-            $designs->title()->editable();
-            $designs->user()->name('Designer');
-            $designs->mode()->editable('select', ACCOUNT_MODES);
-            $designs->status()->select([
-                'pending' => 'Pending',
-                'review' => 'Under Review',
-                'wait' => 'Wait merch approve',
-                'live' => 'Live',
-                'die' => 'Die',
-            ]);
-            $designs->note('Note')->editable();
-            $designs->created_at('Created at');
-        
+            $shirts->resource('/admin/shirt');
+
+            $shirts->id();
+            $shirts->design()->image()->gallery(['zooming' => true]);
+            $shirts->brand()->editable();
+            $shirts->title()->editable();
+          //  $shirts->design()->user()->name('Designer');
+            $shirts->user()->name('Uploader');
+            $shirts->mode()->editable('select', ACCOUNT_MODES);
+            $shirts->status()->select(SHIRT_STATUSES);
+            $shirts->note('Note')->editable();
+            $shirts->created_at('Created at');
+
 
         });
         return $show;
