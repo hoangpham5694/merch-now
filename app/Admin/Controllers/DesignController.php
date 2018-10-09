@@ -12,6 +12,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Facades\Admin;
 use App\Models\Account;
+use Intervention\Image\Facades\Image;
 class DesignController extends Controller
 {
     use HasResourceActions;
@@ -122,8 +123,12 @@ class DesignController extends Controller
         $grid->model()->orderBy('id','DESC');
       //  $grid->model()->where('account_id', '=', null);
         $grid->id('ID');
-        $grid->image()->gallery(['zooming' => true]);
-
+      //  $grid->image()->gallery(['zooming' => true]);
+        $grid->column('Image')->display(function () {
+              // $image= "<a href='".asset('uploads/thumbs')."/{$this->id}.png' class='grid-popup-link'>
+          $image= asset('uploads/thumbs').'/'.$this->id.'.png';
+            return $image;
+         })->gallery(['zooming' => true]);
         $grid->title()->editable();
         $grid->note('Note')->editable();
         $grid->shirts('Total Shirts')->display(function ($shirts) {
@@ -252,6 +257,9 @@ class DesignController extends Controller
         //    $form->user_id= Admin::user()->id;
             if($form->status ==null)
                  $form->status="pending";
+        });
+        $form->saved(function(Form $form){
+            $image = Image::make('uploads/'.$form->model()->image)->resize(400, 480)->save('uploads/thumbs/'.$form->model()->id.'.png');
         });
         return $form;
     }

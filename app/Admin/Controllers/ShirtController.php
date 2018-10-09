@@ -135,7 +135,12 @@ class ShirtController extends Controller
         $grid->model()->orderBy('id','DESC');
         $grid->id('Id shirt');
         $grid->design()->id('Id Design');
-        $grid->design()->image()->gallery(['zooming' => true]);
+      //  $grid->design()->image()->gallery(['zooming' => true]);
+        $grid->column('Image')->display(function () {
+              // $image= "<a href='".asset('uploads/thumbs')."/{$this->id}.png' class='grid-popup-link'>
+          $image= asset('uploads/thumbs').'/'.$this->design_id.'.png';
+            return $image;
+         })->gallery(['zooming' => true]);
         $grid->brand()->editable();
         $grid->title()->editable();
         $grid->account()->name("Account");
@@ -153,7 +158,16 @@ class ShirtController extends Controller
         $grid->status()->editable('select', SHIRT_STATUSES);
 
         $grid->created_at('Created at');
+        $grid->actions(function ($actions) {
 
+            $row=  $actions->row;
+
+            $img = $row->design->image;
+            $urlDownload= asset('uploads/')."/".$img;
+
+
+            $actions->prepend('<a href="'.$urlDownload.'" target="_blank" download="'.$row->image.'"><i class="fa fa-download"></i></a>');
+        });
 
         return $grid;
     }
