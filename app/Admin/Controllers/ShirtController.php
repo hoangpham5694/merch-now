@@ -192,8 +192,8 @@ class ShirtController extends Controller
         $show->account()->name('Account');
         $show->brand();
         $show->title();
-        $show->key_produck_1();
-        $show->key_produck_2();
+        $show->key_product_1();
+        $show->key_product_2();
         $show->note();
         $show->type()->using(SHIRT_TYPES);
         $show->status()->using(SHIRT_STATUSES);
