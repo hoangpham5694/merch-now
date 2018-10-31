@@ -1,4 +1,5 @@
 <?php
+
 const DESIGN_STATUSES = [
   'ok' => 'Ok',
   'danger' => 'Danger',
@@ -29,3 +30,30 @@ const LIST_BROWSERS = [
   'coccoc'=>'Coc Coc',
   'ie'=>'Interner Explorer'
 ];
+
+const SPECIAL = [
+  'yes' => 'Special',
+  'no' => 'Normal'
+];
+function ResponseData($statusCode, $message, $data = [])
+{
+    if($statusCode == 200){
+        $reponse_data = [
+            'success' => [
+                'status' => $statusCode,
+                'message' => $message
+            ]
+        ];
+    } else {
+        $reponse_data = [
+            'error' => [
+                'status' => $statusCode,
+                'message' => $message
+            ]
+        ];
+    }
+    if(is_array($data) && !empty($data)){
+        $reponse_data['success'] = array_merge($reponse_data['success'], $data);
+    }
+    return json_encode($reponse_data);
+}

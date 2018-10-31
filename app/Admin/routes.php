@@ -17,5 +17,8 @@ Route::group([
         'account' => AccountController::class,
         'design' => DesignController::class,
         'shirt' => ShirtController::class,
+        'color' => ColorController::class,
     ]);
+    $router->get('shirt/color/{id}','ShirtController@getPickColor');
+    $router->post('shirt/color/{id}','ShirtController@postPickColor');
 });

@@ -36,11 +36,11 @@ class HomeController extends Controller
         });
         $content->row(function ($row) {
             $countShirtAll = Shirt::where('status','<>','close')->count();
-            $countShirtWait = Shirt::where('status','=','wait')->count();
+            $countShirtReview = Shirt::where('status','=','review')->count();
             $countShirtAlive = Shirt::where('status','=','live')->count();
             $countShirtReject = Shirt::where('status','=','reject')->count();
             $row->column(3, new InfoBox('Total Shirts', 'file-picture-o', 'aqua', '', $countShirtAll));
-            $row->column(3, new InfoBox('Shirts waiting Merch approve', 'file-picture-o', 'fuchsia', '/demo/files', $countShirtWait));
+            $row->column(3, new InfoBox('Shirts waiting Merch approve', 'file-picture-o', 'fuchsia', '/demo/files', $countShirtReview));
             $row->column(3, new InfoBox('Shirts Alive', 'file-picture-o', 'green', '/demo/orders', $countShirtAlive));
             $row->column(3, new InfoBox('Shirts Reject', 'file-picture-o', 'red', '/demo/files', $countShirtReject));
         });

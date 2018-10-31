@@ -1,0 +1,10 @@
+﻿Shirt:
+- all shirt waiting
+- shirts of account with status
+- image of shirt
+- shirt by id
+Account:
+- all account
+- accounts of vps
+Vps 
+- all vps

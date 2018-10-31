@@ -22,4 +22,9 @@ class Shirt extends Model
   {
       return $this->belongsTo(Design::class);
   }
+  public function colors(){
+    return $this->belongsToMany('App\Models\Color', 'shirt_color', 'id_shirt', 'id_color');
+  }
+
+
 }

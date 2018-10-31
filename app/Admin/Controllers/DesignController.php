@@ -129,6 +129,7 @@ class DesignController extends Controller
           $image= asset('uploads/thumbs').'/'.$this->id.'.png';
             return $image;
          })->gallery(['zooming' => true]);
+         //->setAttributes(['style' => 'background-color:red;']);;
         $grid->title()->editable();
         $grid->note('Note')->editable();
         $grid->shirts('Total Shirts')->display(function ($shirts) {

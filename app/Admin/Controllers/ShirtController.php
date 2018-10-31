@@ -12,9 +12,9 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use App\Models\Design;
 use App\Models\User;
-
+use App\Models\Color;
 use Encore\Admin\Facades\Admin;
-
+use Illuminate\Http\Request;
 class ShirtController extends Controller
 {
     use HasResourceActions;
@@ -57,6 +57,7 @@ class ShirtController extends Controller
      */
     public function edit($id, Content $content)
     {
+
         return $content
             ->header('Edit')
             ->description('description')
@@ -76,6 +77,32 @@ class ShirtController extends Controller
             ->header('Create')
             ->description('description')
             ->body($this->form());
+    }
+
+    public function getPickColor($id, Content $content){
+        $shirt = Shirt::findOrFail($id);
+
+      //  dd($shirt->design()->get());
+  //  ::getAll($shirt->type=='long-sleeve'?'yes':'no')
+        if($shirt->type=='long-sleeve'){
+          $colors = Color::select('id','name','code')->where('special' , '=','yes')->get();
+        }else{
+          $colors = Color::select('id','name','code')->get();
+        }
+
+      //  dd($colors);
+        return $content
+            ->header('Pick color')
+            ->description('Pick color of shirt '.$id)
+            ->body(view('admin.pick-color',['shirt'=>$shirt,'colors'=>$colors]));
+    }
+    public function postPickColor($id, Request $request){
+      //  dd($request->color);
+        $shirt = Shirt::findOrFail($id);
+        //foreach($request->colors as $color){
+        $shirt->colors()->sync($request->colors);
+        echo "success";
+
     }
 
     /**
@@ -164,8 +191,8 @@ class ShirtController extends Controller
 
             $img = $row->design->image;
             $urlDownload= asset('uploads/')."/".$img;
-
-
+            $urlPickColor = asset('admin/shirt/color')."/".$row->id;
+            $actions->prepend('<a href="'.$urlPickColor.'" target="_blank" "><i class="fa fa-paint-brush"></i></a>');
             $actions->prepend('<a href="'.$urlDownload.'" target="_blank" download="'.$row->image.'"><i class="fa fa-download"></i></a>');
         });
 
@@ -247,4 +274,6 @@ class ShirtController extends Controller
 
         return $form;
     }
+
+
 }
