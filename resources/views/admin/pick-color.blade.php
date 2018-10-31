@@ -29,7 +29,7 @@
             <div class="col-sm-8">
                 @foreach($colors as $color)
                   <div class="form-check">
-                     <input class="form-check-input position-static" type="checkbox" name="colors[]"  value="{{$color->id}}" aria-label="...">
+                     <input class="form-check-input position-static" type="checkbox" <?php if(in_array($color->id, $arrOldColors)) echo 'checked'?> name="colors[]"  value="{{$color->id}}" aria-label="...">
                      <span style='display:inline-block; width: 20px; height: 20px; background-color:{{$color->code}}' onmouseover="changeColor('{{$color->code}}');"></span>
                      {{$color->name}}
                  </div>

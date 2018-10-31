@@ -89,19 +89,25 @@ class ShirtController extends Controller
         }else{
           $colors = Color::select('id','name','code')->get();
         }
-
+        $oldColors = $shirt->colors()->get();
+        $arrOldColors =[];
+        foreach($oldColors as $oldColor){
+            array_push($arrOldColors,$oldColor->id);
+        }
+        //dd($arrOldColors);
       //  dd($colors);
         return $content
             ->header('Pick color')
             ->description('Pick color of shirt '.$id)
-            ->body(view('admin.pick-color',['shirt'=>$shirt,'colors'=>$colors]));
+            ->body(view('admin.pick-color',['shirt'=>$shirt,'colors'=>$colors, 'arrOldColors'=> $arrOldColors]));
     }
     public function postPickColor($id, Request $request){
       //  dd($request->color);
         $shirt = Shirt::findOrFail($id);
         //foreach($request->colors as $color){
         $shirt->colors()->sync($request->colors);
-        echo "success";
+        //echo "success";
+        return redirect('/admin/shirt');
 
     }
 
