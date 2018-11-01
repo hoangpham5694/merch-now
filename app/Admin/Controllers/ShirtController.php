@@ -15,10 +15,14 @@ use App\Models\User;
 use App\Models\Color;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
+use App\Repositories\ColorRepository;
 class ShirtController extends Controller
 {
     use HasResourceActions;
-
+    protected $colorRepository;
+    public function __construct(ColorRepository $colorRepository){
+      $this->colorRepository = $colorRepository;
+    }
     /**
      * Index interface.
      *
@@ -84,11 +88,9 @@ class ShirtController extends Controller
 
       //  dd($shirt->design()->get());
   //  ::getAll($shirt->type=='long-sleeve'?'yes':'no')
-        if($shirt->type=='long-sleeve'){
-          $colors = Color::select('id','name','code')->where('special' , '=','yes')->get();
-        }else{
-          $colors = Color::select('id','name','code')->get();
-        }
+    //    if($shirt->type=='long-sleeve'){
+        $colors = $this->colorRepository->getAllColorsByTypeShirt($shirt->type);
+
         $oldColors = $shirt->colors()->get();
         $arrOldColors =[];
         foreach($oldColors as $oldColor){
@@ -174,8 +176,20 @@ class ShirtController extends Controller
           $image= asset('uploads/thumbs').'/'.$this->design_id.'.png';
             return $image;
          })->gallery(['zooming' => true]);
+
         $grid->brand()->editable();
         $grid->title()->editable();
+        $grid->column('Color')->display(function () {
+              // $image= "<a href='".asset('uploads/thumbs')."/{$this->id}.png' class='grid-popup-link'>
+          $html= '';
+          $colors = $this->colors()->get();
+        //  dd($colors);
+          foreach($colors as $color){
+      //      $html .= '<span style="background-color:'.$color->code.'">'$color->name.'</span> ';
+              $html.= "<span style='background-color:$color->code'>$color->name</span><br>";
+          }
+          return $html;
+         });
         $grid->account()->name("Account");
       //  $grid->account()->vps()->ip("VPS");
         // $grid->column('VPS')->display(function () {
@@ -198,7 +212,7 @@ class ShirtController extends Controller
             $img = $row->design->image;
             $urlDownload= asset('uploads/')."/".$img;
             $urlPickColor = asset('admin/shirt/color')."/".$row->id;
-            $actions->prepend('<a href="'.$urlPickColor.'" target="_blank" "><i class="fa fa-paint-brush"></i></a>');
+            $actions->prepend('<a href="'.$urlPickColor.'"  ><i class="fa fa-paint-brush"></i></a>');
             $actions->prepend('<a href="'.$urlDownload.'" target="_blank" download="'.$row->image.'"><i class="fa fa-download"></i></a>');
         });
 

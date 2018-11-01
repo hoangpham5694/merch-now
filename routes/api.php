@@ -23,3 +23,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 });
 Route::post('test', 'Api\ShirtController@test');
+Route::get('get-shirt/{id}', 'Api\ShirtController@getShirt');
+Route::get('get-shirts-by-account', 'Api\ShirtController@getShirtsByAccount');
+Route::get('get-colors-of-shirt/{id}', 'Api\ShirtController@getShirtColors');
+
+Route::get('get-account/{id}', 'Api\AccountController@getAccount');
+Route::get('get-accounts-by-vps/{id}', 'Api\AccountController@getAccountsByVps');
