@@ -23,4 +23,10 @@ interface VpsRepository extends RepositoryInterface
      * @return mixed
      */
      public function find($id);
+
+         /**
+     * @param $id
+     * @return mixed
+     */
+    public function getShirts($id);
 }

@@ -50,4 +50,12 @@ class VpsRepositoryEloquent extends BaseRepository implements VpsRepository
        public function find($id){
          return Vps::findOrFail($id);
        }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getShirts($id){
+        
+    }
 }

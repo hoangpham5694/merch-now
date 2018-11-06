@@ -116,6 +116,7 @@ class AccountController extends Controller
         // ];
         // $grid->status()->switch($states);
         $grid->browser();
+        $grid->limited();
         $grid->note()->editable('textarea');
 
         return $grid;
@@ -178,6 +179,8 @@ class AccountController extends Controller
         $form->text('username','Email')->rules('required');
         $form->text('password','Password')->rules('required');
         $form->text('passmail','Pass Mail')->rules('required');
+        $form->number('limited')->rules('required');
+        $form->text('profile_name');
         $form->select('vps_id','VPS')->options(Vps::all()->pluck('name', 'id'));
         $form->select('browser','Browser')->options(LIST_BROWSERS);
         $form->select('status')->options(ACCOUNT_STATUSES);
