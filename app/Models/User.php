@@ -13,4 +13,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Design::class);
     }
+    public function OauthAccessToken(){
+        return $this->hasMany(OauthAccessToken::class);
+    }
 }

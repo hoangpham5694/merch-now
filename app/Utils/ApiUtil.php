@@ -3,7 +3,7 @@
 namespace App\Utils;
 use App\Exceptions\ApiException;
 use GuzzleHttp\Client;
-
+use App\Models\User;
 class ApiUtil
 {
 
@@ -22,11 +22,15 @@ class ApiUtil
                   'Authorization' => 'Bearer ' . $request->session_id,
               ]
           ]);
+        //  die;
+        //  dd($res);
           $data = json_decode($res->getBody());
           if(empty($data)){
               throw new ApiException('BAD REQUEST', 400);
           }
-          return $data;
+          $user = User::find($data->id);
+      //    dd($data);
+          return $user;
       }
 
 }
