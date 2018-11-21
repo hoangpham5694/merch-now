@@ -39,5 +39,17 @@ interface ShirtRepository extends RepositoryInterface
      * @return mixed
      */
      public function getColors($id);
+    /**
+     * @param $vpsId
+     * @param $status
+     * @return mixed
+     */
+    public function getByVps($vpsId);
+
+        /**
+     * @param $vpsId
+     * @return mixed
+     */
+    public function getDesign($id);
 
 }

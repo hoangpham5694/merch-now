@@ -47,7 +47,7 @@ class VpsRepositoryEloquent extends BaseRepository implements VpsRepository
        * @param $id
        * @return mixed
        */
-       public function find($id){
+       public function findById($id){
          return Vps::findOrFail($id);
        }
 

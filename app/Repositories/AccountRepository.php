@@ -23,7 +23,11 @@ interface AccountRepository extends RepositoryInterface
     * @return mixed
     */
     public function getByVps($vpsId, $status = '');
-
+    /**
+     * @param $vpsId
+     * @return mixed
+     */
+     public function getWithCountShirtByVps($vpsId);
     /**
      * @param $id
      * @return mixed

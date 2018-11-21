@@ -46,4 +46,17 @@ class AccountController extends Controller
            return ResponseData(500, $e->getMessage());
        }
     }
+
+    public function getAccountsWithCountShirtsByVps($id, Request $request){
+      try {
+            $user = ApiUtil::CheckSessionUserLogin($request);
+            $accounts = $this->repository->getWithCountShirtByVps($id );
+            return ResponseData(200,'Success',['accounts'=>$accounts]);
+       } catch (ApiException $e) {
+           return ResponseData($e->getStatusCode(), $e->getMessage());
+       } catch (\Exception $e) {
+           return ResponseData(500, $e->getMessage());
+       }
+    }
+
 }

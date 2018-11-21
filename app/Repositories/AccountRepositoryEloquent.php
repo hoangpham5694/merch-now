@@ -7,7 +7,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\AccountRepository;
 use App\Models\Account;
 use App\Validators\AccountValidator;
-
+use Illuminate\Support\Facades\DB;
 /**
  * Class AccountRepositoryEloquent.
  *
@@ -54,6 +54,20 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
           return Account::where('vps_id','=',$vpsId)->get();
         return Account::where('vps_id','=',$vpsId)->where('status','=',$status)->get();
       }
+
+      /**
+       * @param $vpsId
+       * @return mixed
+       */
+       public function getWithCountShirtByVps($vpsId){
+         $data = DB::table("accounts")
+  	    ->select("accounts.id", "accounts.name","accounts.username","accounts.password" )
+        ->addSelect(DB::raw("select COUNT(shirts.id) as count_shirt from shirts"))
+  	    ->join("shirts","shirts.account_id","=","accounts.id")
+  	    ->groupBy("accounts.id")
+	      ->get();
+        return $data;
+       }
 
       /**
        * @param $id

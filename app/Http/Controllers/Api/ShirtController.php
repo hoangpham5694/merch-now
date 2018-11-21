@@ -54,7 +54,36 @@ class ShirtController extends Controller
       try {
             $user = ApiUtil::CheckSessionUserLogin($request);
 
-            return ResponseData(200, 'Success', $this->repository->getColors($id));
+            return ResponseData(200, 'Success', ['colors'=>$this->repository->getColors($id)]);
+       } catch (ApiException $e) {
+           return ResponseData($e->getStatusCode(), $e->getMessage());
+       } catch (\Exception $e) {
+           return ResponseData(500, $e->getMessage());
+       }
+    }
+    public function getShirtByVps(Request $request){
+        try {
+            $user = ApiUtil::CheckSessionUserLogin($request);
+            if(empty($request->vps_id))
+              return ResponseData(400,'Not found vps id');
+            $shirts = $this->repository->getByVps($request->vps_id, empty($request->status)?null:$request->status);
+            return ResponseData(200, 'Success',['shirts'=>$shirts]);
+       } catch (ApiException $e) {
+           return ResponseData($e->getStatusCode(), $e->getMessage());
+       } catch (\Exception $e) {
+           return ResponseData(500, $e->getMessage());
+       }
+    }
+    public function getShirtImage($id, Request $request){
+        try {
+            $user = ApiUtil::CheckSessionUserLogin($request);
+            $design = $this->repository->getDesign($id);
+            //dd($design);
+            //var_dump($design['image']);die;
+            $img = $design['image'];
+            $urlDownload= asset('uploads/')."/".$img;
+          
+            return ResponseData(200, 'Success',['image'=>$urlDownload]);
        } catch (ApiException $e) {
            return ResponseData($e->getStatusCode(), $e->getMessage());
        } catch (\Exception $e) {

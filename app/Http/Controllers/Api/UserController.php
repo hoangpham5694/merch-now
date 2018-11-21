@@ -32,4 +32,16 @@ class UserController extends Controller
         }
     }
 
+    public function getLogout(Request $request)
+    {
+        try{
+             $user = ApiUtil::CheckSessionUserLogin($request);
+             $user->OauthAccessToken()->delete();
+             return $this->responseData(200, 'OK');
+
+        } catch (ValidatorException $e) {
+            return ResponseData(400, 'BAD REQUEST');
+        }
+    }
+
 }

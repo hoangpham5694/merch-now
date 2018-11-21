@@ -22,7 +22,7 @@ interface VpsRepository extends RepositoryInterface
      * @param $id
      * @return mixed
      */
-     public function find($id);
+     public function findById($id);
 
          /**
      * @param $id
