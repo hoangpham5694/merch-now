@@ -8,7 +8,7 @@ const DESIGN_STATUSES = [
 const DESIGN_MODES= ['trend' => 'Trend', 'niche' => 'Niche','tm' => 'TM','niche-trend'=>'Niche - Trend'];
 const SHIRT_STATUSES = [
     'review' => 'Review',
-    'close' => 'close',
+    'close' => 'Close',
     'wait' => 'Wait',
     'live' => 'Live',
     'reject' => 'Reject',

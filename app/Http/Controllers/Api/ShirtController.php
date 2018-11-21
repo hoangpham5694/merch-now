@@ -90,4 +90,27 @@ class ShirtController extends Controller
            return ResponseData(500, $e->getMessage());
        }
     }
+    public function setStatus($id, Request $request){
+        try {
+            $user = ApiUtil::CheckSessionUserLogin($request);
+            $shirt = $this->repository->find($id);
+         //   dd($shirt);
+            if(isset($request->status)){
+                if( array_key_exists($request->status, SHIRT_STATUSES)){
+                    $shirt->status = $request->status;
+                  //  $this->repository->save();
+                    $shirt->save();
+                 //   dd($shirt);
+                    return ResponseData(200, 'Success');
+                }
+            }
+
+          
+            return ResponseData(200, 'Can not set status');
+       } catch (ApiException $e) {
+           return ResponseData($e->getStatusCode(), $e->getMessage());
+       } catch (\Exception $e) {
+           return ResponseData(500, $e->getMessage());
+       }
+    }
 }

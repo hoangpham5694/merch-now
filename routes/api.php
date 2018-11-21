@@ -35,3 +35,4 @@ Route::get('get-accounts-by-vps/{id}', 'Api\AccountController@getAccountsByVps')
 Route::get('get-accounts-with-countshirts-by-vps/{id}', 'Api\AccountController@getAccountsWithCountShirtsByVps');
 Route::get('get-shirts-by-vps', 'Api\ShirtController@getShirtByVps');
 Route::get('get-image-of-shirt/{id}', 'Api\ShirtController@getShirtImage');
+Route::get('set-status/{id}', 'Api\ShirtController@setStatus');
